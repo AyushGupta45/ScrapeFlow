@@ -18,6 +18,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import DashboardUserButton from "./dashboard-user-button";
+import DashboardTrial from "./dashboard-trial";
 
 export const DashboardSidebar = () => {
   const pathname = usePathname();
@@ -62,8 +63,8 @@ export const DashboardSidebar = () => {
         </SidebarContent>
 
         <SidebarFooter>
-          {/* <DashboardTrial /> */}
-          <div className="py-1" />
+          <DashboardTrial />
+          <div/>
           <DashboardUserButton />
         </SidebarFooter>
       </Sidebar>

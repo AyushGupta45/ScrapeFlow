@@ -9,37 +9,41 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
+import Link from "next/link";
 
 const BreadcrumbHeader = () => {
   const pathName = usePathname();
-  const paths = pathName === "/" ? [""] : pathName.split("/").filter(Boolean);
-  console.log(pathName, paths)
+  const paths = pathName === "/" ? [""] : pathName.split("/");
 
   return (
-    <div className="flex items-center flex-start">
+    <div className="hidden md:flex items-center flex-start truncate">
       <Breadcrumb>
         <BreadcrumbList>
-          {paths.length <= 1 ? (
-            <BreadcrumbItem>
-              <BreadcrumbLink className="capitalize" href={pathName}>
-                {paths[0] || "home"}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          ) : (
-            paths.map((path, index) => (
+          {paths.map((path, index) => {
+            const isLast = index === paths.length - 1;
+
+            return (
               <React.Fragment key={index}>
-                <BreadcrumbItem>
-                  <BreadcrumbLink
-                    className="capitalize"
-                    href={"/" + paths.slice(0, index + 1).join("/")}
-                  >
-                    {path}
+                <BreadcrumbItem className="text-base">
+                  <BreadcrumbLink asChild>
+                    <Link
+                      href={
+                        index === 0
+                          ? "/"
+                          : "/" + paths.slice(1, index + 1).join("/")
+                      }
+                      className={`capitalize ${
+                        isLast ? "text-primary font-medium" : "text-gray-500"
+                      }`}
+                    >
+                      {path === "" ? "home" : path}
+                    </Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
-                {index < paths.length - 1 && <BreadcrumbSeparator />}
+                {!isLast && <BreadcrumbSeparator />}
               </React.Fragment>
-            ))
-          )}
+            );
+          })}
         </BreadcrumbList>
       </Breadcrumb>
     </div>

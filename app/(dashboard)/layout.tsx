@@ -1,8 +1,6 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-
-import BreadcrumbHeader from "@/components/BreadcrumbHeader";
 import DashboardNavbar from "@/modules/dashboard/ui/components/dashboard-navbar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import DashboardSidebar from "@/modules/dashboard/ui/components/dashboard-sidebar";
@@ -23,11 +21,10 @@ const Layout = async ({ children }: Props) => {
   return (
     <SidebarProvider>
       <DashboardSidebar />
-      <main className="flex flex-col min-h-screen w-screen bg-muted">
+      <main className="flex flex-col min-h-screen w-screen bg-accent">
         <DashboardNavbar />
-        <div className="overflow-auto">
-          <div className="flex-1 container py-4 text-accent-foreground">
-            <BreadcrumbHeader />
+        <div className="overflow-auto flex-1">
+          <div className="p-8 py-4 text-accent-foreground h-full">
             {children}
           </div>
         </div>
