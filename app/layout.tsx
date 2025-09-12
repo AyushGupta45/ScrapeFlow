@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   title: "SrapeFlow",
   description:
     "ScrapeFlow is a web scraping tool that allows you to extract data from websites easily.",
+  icons: {
+    icon: "/logo.ico",
+  },
 };
 
 export default function RootLayout({
@@ -25,7 +28,7 @@ export default function RootLayout({
       <TRPCReactProvider>
         <html lang="en">
           <body className={`${inter.className} antialiased`}>
-            <Toaster richColors/>
+            <Toaster richColors />
             {children}
           </body>
         </html>

@@ -13,6 +13,27 @@ import {
 import { workflowInsertSchema } from "../schema";
 
 export const workflowsRouter = createTRPCRouter({
+  getOne: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const data = await db
+        .select(getTableColumns(workflow))
+        .from(workflow)
+        .where(
+          and(eq(workflow.id, input.id), eq(workflow.userId, ctx.auth.user.id))
+        )
+        .limit(1);
+
+      if (!data.length) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Workflow not found",
+        });
+      }
+
+      return data[0];
+    }),
+
   getMany: protectedProcedure
     .input(
       z.object({
