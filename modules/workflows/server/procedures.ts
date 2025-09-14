@@ -10,9 +10,76 @@ import {
   MAX_PAGE_SIZE,
   MIN_PAGE_SIZE,
 } from "@/constants";
-import { workflowInsertSchema } from "../schema";
+import { workflowInsertSchema, workflowUpdateSchema } from "../schema";
+
+import { TaskType, WorkflowDefinition } from "../interfaces";
+import { CreateFlowNode } from "../ui/components/canvas_nodes/create-node-flow";
 
 export const workflowsRouter = createTRPCRouter({
+  create: protectedProcedure
+    .input(workflowInsertSchema)
+    .mutation(async ({ input, ctx }) => {
+      const existing = await db
+        .select()
+        .from(workflow)
+        .where(
+          and(
+            eq(workflow.userId, ctx.auth.user.id),
+            eq(workflow.name, input.name)
+          )
+        )
+        .limit(1);
+
+      if (existing.length > 0) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "You already have a workflow with this name",
+        });
+      }
+
+      const initialDefinition: WorkflowDefinition = {
+        nodes: [],
+        edges: [],
+      };
+
+      initialDefinition.nodes.push(
+        CreateFlowNode({ nodetype: TaskType.LAUNCH_BROWSER })
+      );
+
+      const [createdWorkflow] = await db
+        .insert(workflow)
+        .values({
+          name: input.name,
+          description: input.description,
+          userId: ctx.auth.user.id,
+          definition: JSON.stringify(initialDefinition),
+          status: "draft",
+        })
+        .returning();
+
+      return createdWorkflow;
+    }),
+  update: protectedProcedure
+    .input(workflowUpdateSchema)
+    .mutation(async ({ input, ctx }) => {
+      console.log(input);
+      const [updatedWorkflow] = await db
+        .update(workflow)
+        .set(input)
+        .where(
+          and(eq(workflow.id, input.id), eq(workflow.userId, ctx.auth.user.id))
+        )
+        .returning();
+
+      if (!updatedWorkflow) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Workflow not found",
+        });
+      }
+
+      return updatedWorkflow;
+    }),
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
@@ -68,41 +135,6 @@ export const workflowsRouter = createTRPCRouter({
         total: total.count,
         totalPages,
       };
-    }),
-
-  create: protectedProcedure
-    .input(workflowInsertSchema)
-    .mutation(async ({ input, ctx }) => {
-      const existing = await db
-        .select()
-        .from(workflow)
-        .where(
-          and(
-            eq(workflow.userId, ctx.auth.user.id),
-            eq(workflow.name, input.name)
-          )
-        )
-        .limit(1);
-
-      if (existing.length > 0) {
-        throw new TRPCError({
-          code: "CONFLICT",
-          message: "You already have a workflow with this name",
-        });
-      }
-
-      const [createdWorkflow] = await db
-        .insert(workflow)
-        .values({
-          name: input.name,
-          description: input.description,
-          userId: ctx.auth.user.id,
-          definition: "{}",
-          status: "draft",
-        })
-        .returning();
-
-      return createdWorkflow;
     }),
 
   remove: protectedProcedure

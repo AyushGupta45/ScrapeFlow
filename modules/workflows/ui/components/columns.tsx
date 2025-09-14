@@ -114,11 +114,7 @@ export const columns: ColumnDef<WorkflowGetMany[number]>[] = [
           <RemoveConfirmation />
           <div className="flex items-center gap-4 justify-end">
             <Link href={`/workflow/editor/${row.original.id}`}>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => console.log("Edit workflow", row.original.id)}
-              >
+              <Button variant="outline" size="sm">
                 <ShuffleIcon size={16} />
                 Edit
               </Button>

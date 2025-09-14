@@ -1,4 +1,4 @@
-import { Node } from "@xyflow/react";
+import { Edge, Node } from "@xyflow/react";
 
 export enum TaskType {
   LAUNCH_BROWSER = "LAUNCH_BROWSER",
@@ -34,3 +34,8 @@ export interface AppNodeData {
   inputs: Record<string, string>;
   [key: string]: any;
 }
+
+export type WorkflowDefinition = {
+  nodes: AppNode[];
+  edges: Edge[];
+};

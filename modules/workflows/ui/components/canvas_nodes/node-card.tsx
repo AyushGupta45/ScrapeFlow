@@ -20,7 +20,7 @@ const NodeCard = ({ children, nodeId, isSelected }: Props) => {
     const { width = 0, height = 0 } = node.measured;
 
     setCenter(posX + width / 2, posY + height / 2, {
-      zoom: 1.5,
+      zoom: 1,
       duration: 500,
     });
   };
