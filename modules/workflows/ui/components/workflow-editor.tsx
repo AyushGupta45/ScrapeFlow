@@ -3,6 +3,7 @@ import { WorkflowGetOne } from "../../types";
 import { ReactFlowProvider } from "@xyflow/react";
 import WorkflowEditorCanvas from "./workflow-editor-canvas";
 import TopBar from "./topbar";
+import TaskMenu from "./task_menu";
 
 interface Props {
   workflow: WorkflowGetOne;
@@ -14,6 +15,7 @@ const WorkflowEditor = ({ workflow }: Props) => {
       <div className="flex flex-col h-full w-full overflow-hidden">
         <TopBar workflow={workflow} />
         <section className="flex h-full overflow-auto">
+          <TaskMenu />
           <WorkflowEditorCanvas workflow={workflow} />
         </section>
       </div>

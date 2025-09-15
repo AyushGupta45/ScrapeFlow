@@ -10,9 +10,9 @@ interface Props {
 }
 
 const NodeHeader = ({ taskType }: Props) => {
-  const task = TaskRegistry[taskType];
+  const task = TaskRegistry[taskType as keyof typeof TaskRegistry];
   return (
-    <div className="flex items-center gap-2 p-2">
+    <div className="flex items-center gap-2 p-2 drag-handle cursor-grab">
       <div className="flex justify-between items-center w-full">
         <div className="flex flex-row items-center gap-1">
           <task.icon size={16} />

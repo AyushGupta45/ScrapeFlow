@@ -16,10 +16,7 @@ const Layout = async ({ children }: Props) => {
   }
 
   return (
-    
-    <main className="flex flex-col h-screen w-screen bg-accent">
-      {children}
-    </main>
+    <main className="flex flex-col h-screen w-screen bg-white">{children}</main>
   );
 };
 

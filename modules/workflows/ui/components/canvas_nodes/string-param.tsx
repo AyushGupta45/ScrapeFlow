@@ -4,11 +4,7 @@ import { Label } from "@/components/ui/label";
 import { ParamProps } from "@/modules/workflows/interfaces";
 import React, { useId, useState } from "react";
 
-const StringParamInput = ({
-  input,
-  value,
-  updateNodeParamValue,
-}: ParamProps) => {
+const StringParam = ({ input, value, updateNodeParamValue }: ParamProps) => {
   const [internalValue, setInternalValue] = useState(value ?? "");
   const id = useId();
 
@@ -35,4 +31,4 @@ const StringParamInput = ({
   );
 };
 
-export default StringParamInput;
+export default StringParam;

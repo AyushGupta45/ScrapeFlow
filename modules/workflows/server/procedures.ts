@@ -62,7 +62,6 @@ export const workflowsRouter = createTRPCRouter({
   update: protectedProcedure
     .input(workflowUpdateSchema)
     .mutation(async ({ input, ctx }) => {
-      console.log(input);
       const [updatedWorkflow] = await db
         .update(workflow)
         .set(input)

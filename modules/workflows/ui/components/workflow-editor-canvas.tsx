@@ -1,8 +1,11 @@
-import React, { useEffect } from "react";
-import { TaskType } from "../../interfaces";
+import React, { useCallback, useEffect } from "react";
+import { AppNode, TaskType } from "../../interfaces";
 import {
+  addEdge,
   Background,
+  Connection,
   Controls,
+  Edge,
   ReactFlow,
   useEdgesState,
   useNodesState,
@@ -12,6 +15,9 @@ import "@xyflow/react/dist/style.css";
 
 import { NodeComponent } from "./canvas_nodes/node-components";
 import { WorkflowGetOne } from "../../types";
+import { on } from "events";
+import { CreateFlowNode } from "./canvas_nodes/create-node-flow";
+import { DeletableEdge } from "./canvas_edges/deletable-edge";
 
 interface Props {
   workflow: WorkflowGetOne;
@@ -21,10 +27,14 @@ const nodeTypes = {
   ScrapeFlowNode: NodeComponent,
 };
 
+const edgeTypes = {
+  default: DeletableEdge,
+};
+
 const WorkflowEditorCanvas = ({ workflow }: Props) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const { setViewport } = useReactFlow();
+  const [nodes, setNodes, onNodesChange] = useNodesState<AppNode>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
+  const { setViewport, screenToFlowPosition } = useReactFlow();
   useEffect(() => {
     try {
       const flow = JSON.parse(workflow.definition);
@@ -38,6 +48,32 @@ const WorkflowEditorCanvas = ({ workflow }: Props) => {
     } catch (e) {}
   }, [workflow.definition, setViewport, setNodes, setEdges]);
 
+  const onDragOver = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+  }, []);
+
+  const onDrop = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
+    const tasktype = event.dataTransfer.getData("application/reactflow");
+    if (typeof tasktype === undefined || !tasktype) return;
+
+    const position = screenToFlowPosition({
+      x: event.clientX,
+      y: event.clientY,
+    });
+
+    const newNode = CreateFlowNode({
+      nodetype: tasktype as TaskType,
+      position,
+    });
+    setNodes((nds) => nds.concat(newNode));
+  }, []);
+
+  const onConnect = useCallback((connection: Connection) => {
+    setEdges((eds) => addEdge({ ...connection, animated: true }, eds));
+  }, []);
+
   return (
     <main className="h-full w-full">
       <ReactFlow
@@ -46,13 +82,15 @@ const WorkflowEditorCanvas = ({ workflow }: Props) => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
-        snapToGrid
-        snapGrid={[50, 50]}
+        edgeTypes={edgeTypes}
         fitView
-        fitViewOptions={{ padding: 1 }}
+        fitViewOptions={{ padding: 0.1 }}
+        onDragOver={onDragOver}
+        onDrop={onDrop}
+        onConnect={onConnect}
       >
         <Background />
-        <Controls position="top-left" fitViewOptions={{ padding: 1 }} />
+        <Controls position="top-left" fitViewOptions={{ padding: 0.1 }} />
       </ReactFlow>
     </main>
   );

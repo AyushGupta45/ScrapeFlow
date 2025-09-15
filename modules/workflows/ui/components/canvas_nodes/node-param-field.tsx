@@ -7,15 +7,16 @@ import {
   TaskTypesParams,
 } from "@/modules/workflows/interfaces";
 import React, { useCallback } from "react";
-import StringParamInput from "./string-param-input";
 import { useReactFlow } from "@xyflow/react";
+import StringParam from "./string-param";
+import BrowserInstanceParam from "./browser-instance-param";
 
 interface Props {
   input: TaskParam;
   nodeId: string;
 }
 
-const NodeParamInput = ({ input, nodeId }: Props) => {
+const NodeParamField = ({ input, nodeId }: Props) => {
   const { updateNodeData, getNode } = useReactFlow();
   const node = getNode(nodeId) as AppNode;
   const value = node?.data.inputs?.[input.name];
@@ -35,9 +36,17 @@ const NodeParamInput = ({ input, nodeId }: Props) => {
   switch (input.type) {
     case TaskTypesParams.STRING:
       return (
-        <StringParamInput
+        <StringParam
           input={input}
           value={value}
+          updateNodeParamValue={updateNodeParamValue}
+        />
+      );
+    case TaskTypesParams.BROWSER_INSTANCE:
+      return (
+        <BrowserInstanceParam
+          input={input}
+          value={""}
           updateNodeParamValue={updateNodeParamValue}
         />
       );
@@ -50,4 +59,4 @@ const NodeParamInput = ({ input, nodeId }: Props) => {
   }
 };
 
-export default NodeParamInput;
+export default NodeParamField;

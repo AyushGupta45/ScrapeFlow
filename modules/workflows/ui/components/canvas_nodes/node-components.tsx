@@ -4,12 +4,12 @@ import NodeCard from "./node-card";
 import NodeHeader from "./node-header";
 import { AppNodeData } from "@/modules/workflows/interfaces";
 import { TaskRegistry } from "../../tasks/registry";
-import NodeInputs from "./node-inputs";
-import NodeInput from "./node-input";
+import { NodeInput, NodeInputs } from "./node-inputs";
+import { NodeOutput, NodeOutputs } from "./node-outputs";
 
 export const NodeComponent = memo((props: NodeProps) => {
   const nodeData = props.data as AppNodeData;
-  const task = TaskRegistry[nodeData.type];
+  const task = TaskRegistry[nodeData.type as keyof typeof TaskRegistry];
 
   return (
     <NodeCard nodeId={props.id} isSelected={!!props.selected}>
@@ -19,6 +19,12 @@ export const NodeComponent = memo((props: NodeProps) => {
           <NodeInput key={input.name} input={input} nodeId={props.id} />
         ))}
       </NodeInputs>
+
+      <NodeOutputs>
+        {task.outputs.map((output) => (
+          <NodeOutput key={output.name} output={output} nodeId={props.id} />
+        ))}
+      </NodeOutputs>
     </NodeCard>
   );
 });
