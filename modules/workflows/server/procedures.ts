@@ -12,7 +12,7 @@ import {
 } from "@/constants";
 import { workflowInsertSchema, workflowUpdateSchema } from "../schema";
 
-import { TaskType, WorkflowDefinition } from "../interfaces";
+import { TaskType, WorkflowDefinition } from "../types";
 import { CreateFlowNode } from "../ui/components/canvas_nodes/create-node-flow";
 
 export const workflowsRouter = createTRPCRouter({

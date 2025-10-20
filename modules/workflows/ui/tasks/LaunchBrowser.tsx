@@ -1,5 +1,5 @@
 import { GlobeIcon, LucideProps } from "lucide-react";
-import { TaskType, TaskTypesParams } from "../../interfaces";
+import { TaskType, TaskTypesParams } from "../../types";
 
 export const LaunchBrowserTask = {
   type: TaskType.LAUNCH_BROWSER,

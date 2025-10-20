@@ -1,5 +1,5 @@
 import React from "react";
-import { TaskType } from "../../interfaces";
+import { TaskType } from "../../types";
 import { TaskRegistry } from "../tasks/registry";
 import { Button } from "@/components/ui/button";
 import { on } from "events";
@@ -22,7 +22,7 @@ const TaskMenuItem = ({ taskType }: Props) => {
       draggable
       onDragStart={(event) => onDragStart(event, taskType)}
     >
-      <div className="flex justify-centeritems-center gap-1.5">
+      <div className="flex justify-center items-center gap-1.5 ">
         <task.icon size={20} />
         <p>{task.label}</p>
       </div>

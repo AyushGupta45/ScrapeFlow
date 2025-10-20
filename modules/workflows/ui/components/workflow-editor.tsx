@@ -2,8 +2,11 @@ import React from "react";
 import { WorkflowGetOne } from "../../types";
 import { ReactFlowProvider } from "@xyflow/react";
 import WorkflowEditorCanvas from "./workflow-editor-canvas";
-import TopBar from "./topbar";
-import TaskMenu from "./task_menu";
+import TaskMenu from "./task_menu_sidebar";
+import WorkflowEditorHeader from "./workflow-editor-header";
+import TaskMenuSidebar from "./task_menu_sidebar";
+import { Sidebar } from "lucide-react";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 interface Props {
   workflow: WorkflowGetOne;
@@ -12,13 +15,17 @@ interface Props {
 const WorkflowEditor = ({ workflow }: Props) => {
   return (
     <ReactFlowProvider>
-      <div className="flex flex-col h-full w-full overflow-hidden">
-        <TopBar workflow={workflow} />
-        <section className="flex h-full overflow-auto">
-          <TaskMenu />
-          <WorkflowEditorCanvas workflow={workflow} />
-        </section>
-      </div>
+      <SidebarProvider>
+        <div className="flex flex-col h-full w-full overflow-hidden">
+          <section className="flex h-full overflow-auto">
+            <TaskMenuSidebar />
+            <div className="flex flex-1 flex-col">
+              <WorkflowEditorHeader workflow={workflow} />
+              <WorkflowEditorCanvas workflow={workflow} />
+            </div>
+          </section>
+        </div>
+      </SidebarProvider>
     </ReactFlowProvider>
   );
 };

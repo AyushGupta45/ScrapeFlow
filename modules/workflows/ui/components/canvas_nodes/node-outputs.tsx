@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { ColorForHandle, TaskParam } from "@/modules/workflows/interfaces";
+import { ColorForHandle, TaskParam } from "@/modules/workflows/types";
 import { Handle, Position } from "@xyflow/react";
 import React from "react";
 
@@ -18,7 +18,7 @@ export const NodeOutputs = ({ children }: NodeOutputsProps) => {
 
 export const NodeOutput = ({ output, nodeId }: NodeOutputProps) => {
   return (
-    <div className="flex justify-end relative p-3 bg-muted rounded-b-sm w-full">
+    <div className="flex justify-end relative p-3 bg-muted rounded-sm w-full">
       {/* <NodeParamOutput output={output} nodeId={nodeId} /> */}
       <p className="">{output.name}</p>
 

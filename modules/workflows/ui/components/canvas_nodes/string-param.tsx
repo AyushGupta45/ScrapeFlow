@@ -1,12 +1,28 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ParamProps } from "@/modules/workflows/interfaces";
-import React, { useId, useState } from "react";
+import { Textarea } from "@/components/ui/textarea";
+import { ParamProps } from "@/modules/workflows/types";
+import React, { useEffect, useId, useState } from "react";
 
-const StringParam = ({ input, value, updateNodeParamValue }: ParamProps) => {
+const StringParam = ({
+  input,
+  value,
+  updateNodeParamValue,
+  disabled,
+}: ParamProps) => {
   const [internalValue, setInternalValue] = useState(value ?? "");
   const id = useId();
+
+  let Component: any = Input;
+
+  if (input.variant === "textarea") {
+    Component = Textarea;
+  }
+
+  useEffect(() => {
+    setInternalValue(value ?? "");
+  }, [value]);
 
   return (
     <div className="w-full p-1 space-y-1">
@@ -15,13 +31,14 @@ const StringParam = ({ input, value, updateNodeParamValue }: ParamProps) => {
         {input.required && <span className="text-red-500">*</span>}
       </Label>
 
-      <Input
+      <Component
         placeholder="Enter value here"
         className="bg-background  text-xs mb-1"
         id={id}
+        disabled={disabled}
         value={internalValue}
-        onChange={(e) => setInternalValue(e.target.value)}
-        onBlur={(e) => updateNodeParamValue(e.target.value)}
+        onChange={(e: any) => setInternalValue(e.target.value)}
+        onBlur={(e: any) => updateNodeParamValue(e.target.value)}
       />
 
       {input.helperText && (

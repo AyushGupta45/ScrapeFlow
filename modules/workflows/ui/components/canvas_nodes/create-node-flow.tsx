@@ -1,4 +1,4 @@
-import { AppNode, TaskType } from "@/modules/workflows/interfaces";
+import { AppNode, TaskType } from "@/modules/workflows/types";
 
 interface Props {
   nodetype: TaskType;

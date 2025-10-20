@@ -1,7 +1,7 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ParamProps } from "@/modules/workflows/interfaces";
+import { ParamProps } from "@/modules/workflows/types";
 import React, { useId, useState } from "react";
 
 const BrowserInstanceParam = ({ input }: ParamProps) => {

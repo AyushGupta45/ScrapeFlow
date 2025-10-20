@@ -37,9 +37,7 @@ const DashboardNavbar = () => {
             )}
           </Button>
 
-      
-            <BreadcrumbHeader  />
-       
+          <BreadcrumbHeader />
         </div>
         <Button
           variant="outline"
