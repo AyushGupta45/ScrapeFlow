@@ -20,14 +20,9 @@ import { Textarea } from "@/components/ui/textarea";
 interface WorkflowFormProps {
   onSuccess?: (id?: string) => void;
   onCancel?: () => void;
-  // initialValues?: Workflow; // for future update
 }
 
-export const WorkflowForm = ({
-  onSuccess,
-  onCancel,
-}: // initialValues,
-WorkflowFormProps) => {
+export const WorkflowForm = ({ onSuccess, onCancel }: WorkflowFormProps) => {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
@@ -46,44 +41,18 @@ WorkflowFormProps) => {
     })
   );
 
-  // const updateWorkflow = useMutation(
-  //   trpc.workflows.update.mutationOptions({
-  //     onSuccess: async () => {
-  //       await queryClient.invalidateQueries(
-  //         trpc.workflows.getMany.queryOptions({})
-  //       );
-  //       if (initialValues?.id) {
-  //         await queryClient.invalidateQueries(
-  //           trpc.workflows.getOne.queryOptions({ id: initialValues.id })
-  //         );
-  //       }
-  //       onSuccess?.();
-  //     },
-  //     onError: (error) => {
-  //       toast.error(error.message);
-  //     },
-  //   })
-  // );
-
   const form = useForm<z.infer<typeof workflowInsertSchema>>({
     resolver: zodResolver(workflowInsertSchema),
     defaultValues: {
       name: "",
       description: "",
-      // name: initialValues?.name ?? "",
-      // description: initialValues?.description ?? "",
     },
   });
 
-  // const isEdit = !!initialValues?.id;
-  const isPending = createWorkflow.isPending; // || updateWorkflow.isPending;
+  const isPending = createWorkflow.isPending;
 
   const onSubmit = (values: z.infer<typeof workflowInsertSchema>) => {
-    // if (isEdit) {
-    //   updateWorkflow.mutate({ ...values, id: initialValues.id });
-    // } else {
     createWorkflow.mutate(values);
-    // }
   };
 
   return (
@@ -114,6 +83,7 @@ WorkflowFormProps) => {
                   className="resize-none h-32"
                   placeholder="E.g. This workflow automates the customer onboarding process."
                   {...field}
+                  value={field.value ?? ""}
                 />
               </FormControl>
               <FormMessage />
@@ -134,7 +104,6 @@ WorkflowFormProps) => {
           )}
           <Button disabled={isPending} type="submit">
             Create
-            {/* {isEdit ? "Update" : "Create"} */}
           </Button>
         </div>
       </form>

@@ -18,6 +18,31 @@ export enum TaskTypesParams {
   BROWSER_INSTANCE = "BROWSER_INSTANCE",
 }
 
+export enum WorkflowStatus {
+  DRAFT = "draft",
+  PUBLISHED = "published",
+}
+
+export enum WorkflowExecutionStatus {
+  PENDING = "PENDING",
+  RUNNING = "RUNNING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+}
+
+export enum ExecutionPhaseStatus {
+  CREATED = "CREATED",
+  PENDING = "PENDING",
+  RUNNING = "RUNNING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+}
+
+export enum ExecutionTrigger {
+  MANUAL = "MANUAL",
+  SCHEDULED = "SCHEDULED",
+}
+
 export const ColorForHandle: Record<TaskTypesParams, string> = {
   STRING: "!bg-amber-500",
   BROWSER_INSTANCE: "!bg-sky-500",
@@ -53,3 +78,20 @@ export type WorkflowDefinition = {
   nodes: AppNode[];
   edges: Edge[];
 };
+
+export type WorkflowExecutionPlanPhase = {
+  phase: number;
+  nodes: AppNode[];
+};
+
+export type WorkflowExecutionPlan = WorkflowExecutionPlanPhase[];
+
+export type AppNodeMissingInputs = {
+  nodeId: string;
+  inputs: string[];
+};
+
+export enum FlowToExecutionValidationError {
+  "NO_ENTRY_POINT",
+  "INVALID_INPUTS",
+}

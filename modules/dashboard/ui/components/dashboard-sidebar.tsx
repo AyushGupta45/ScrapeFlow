@@ -25,15 +25,15 @@ export const DashboardSidebar = () => {
   return (
     <>
       <Sidebar className="select-none">
-        <SidebarHeader className="text-sidebar-accent-foreground py-4">
+        <SidebarHeader className="text-sidebar-accent-foreground py-4 bg-white">
           <div className="flex justify-center">
             <Logo />
           </div>
         </SidebarHeader>
 
-        <Separator className="mb-4" />
+        <Separator />
 
-        <SidebarContent>
+        <SidebarContent className="bg-white">
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>

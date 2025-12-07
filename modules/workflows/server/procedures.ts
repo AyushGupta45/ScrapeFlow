@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { and, count, desc, eq, getTableColumns, ilike, sql } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
-import { workflow } from "@/db/schema";
+import { executionPhase, workflow, workflowExecution } from "@/db/schema";
 import {
   DEFAULT_PAGE,
   DEFAULT_PAGE_SIZE,
@@ -12,8 +12,18 @@ import {
 } from "@/constants";
 import { workflowInsertSchema, workflowUpdateSchema } from "../schema";
 
-import { TaskType, WorkflowDefinition } from "../types";
+import {
+  TaskType,
+  WorkflowDefinition,
+  WorkflowExecutionPlan,
+  WorkflowExecutionStatus,
+  WorkflowStatus,
+  ExecutionPhaseStatus,
+  ExecutionTrigger,
+} from "../types";
 import { CreateFlowNode } from "../ui/components/canvas_nodes/create-node-flow";
+import { FlowToExecutionPlan } from "../lib/execution-plan";
+import { TaskRegistry } from "../ui/tasks/registry";
 
 export const workflowsRouter = createTRPCRouter({
   create: protectedProcedure
@@ -53,7 +63,7 @@ export const workflowsRouter = createTRPCRouter({
           description: input.description,
           userId: ctx.auth.user.id,
           definition: JSON.stringify(initialDefinition),
-          status: "draft",
+          status: WorkflowStatus.DRAFT,
         })
         .returning();
 
@@ -154,5 +164,101 @@ export const workflowsRouter = createTRPCRouter({
       }
 
       return removedWorkflow;
+    }),
+
+  run: protectedProcedure
+    .input(
+      z.object({
+        workflowId: z.string(),
+        flowDefinition: z.string().optional(),
+      })
+    )
+
+    .mutation(async ({ input, ctx }) => {
+      if (!input.workflowId) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Workflow ID is required",
+        });
+      }
+
+      const [workflowToRun] = await db
+        .select()
+        .from(workflow)
+        .where(
+          and(
+            eq(workflow.id, input.workflowId),
+            eq(workflow.userId, ctx.auth.user.id)
+          )
+        )
+        .limit(1);
+
+      if (!workflowToRun) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Workflow not found",
+        });
+      }
+
+      let executionPlan: WorkflowExecutionPlan;
+
+      if (!input.flowDefinition) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Flow definition is not defined",
+        });
+      }
+
+      const flow = JSON.parse(input.flowDefinition);
+      const result = FlowToExecutionPlan(flow.nodes, flow.edges);
+      if (result.error) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Flow definition is not valid",
+        });
+      }
+      if (!result.executionPlan) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No execution plan generated",
+        });
+      }
+
+      executionPlan = result.executionPlan;
+
+      // 1. Insert execution
+      const [workflow_execution] = await db
+        .insert(workflowExecution)
+        .values({
+          workflowId: workflowToRun.id,
+          userId: ctx.auth.user.id,
+          status: WorkflowExecutionStatus.PENDING,
+          startedAt: new Date(),
+          trigger: ExecutionTrigger.MANUAL,
+          // definition: workflowDefinition,
+        })
+        .returning();
+
+      // 2. Prepare phases data
+      const execution_phase = await db
+        .insert(executionPhase)
+        .values(
+          executionPlan.flatMap((phase) =>
+            phase.nodes.map((node) => ({
+              workflowExecutionId: workflow_execution.id,
+              userId: ctx.auth.user.id,
+              status: ExecutionPhaseStatus.CREATED,
+              number: phase.phase,
+              node: JSON.stringify(node),
+              name: TaskRegistry[node.data.type].label,
+            }))
+          )
+        )
+        .returning();
+
+      return {
+        ...workflow_execution,
+        execution_phase,
+      };
     }),
 });

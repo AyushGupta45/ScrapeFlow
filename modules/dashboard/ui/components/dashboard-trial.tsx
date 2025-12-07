@@ -29,17 +29,17 @@ const DashboardTrial = () => {
   // }
 
   return (
-    <div className="border bg-sidebar-accent rounded-lg w-full flex flex-col gap-y-2">
+    <div className="border-2 bg-sidebar-accent rounded-lg w-full flex flex-col gap-y-2">
       <div className="p-3 flex flex-col gap-y-4">
         <div className="flex items-center gap-2">
           <RocketIcon className="size-4" />
-          <p className="text-sm font-medium">Free Trial</p>
+          <p className="text-sm font-medium">TODO</p>
         </div>
         <div className="flex flex-col gap-y-2">
           <p className="text-xs">
-            0/200 Credits
+            TODO
           </p>
-          <Progress value={(0/ 200) * 100} />
+          <Progress value={(100/ 200) * 100} />
         </div>
       </div>
       <div className="px-4 pb-4">
@@ -47,7 +47,7 @@ const DashboardTrial = () => {
         <Button
         className="w-full"
       >
-        <Link href="/upgrade">Buy Credits</Link>
+        {/* <Link href="/upgrade">Buy Credits</Link> */}TODO
       </Button></div>
       
     </div>

@@ -30,13 +30,11 @@ import { toast } from "sonner";
 
 const statusIconMap = {
   draft: ClockArrowUpIcon,
-  archived: ArchiveIcon,
   published: RocketIcon,
 };
 
 const statusColorMap = {
   draft: "bg-yellow-500/20 text-yellow-800 border-yellow-800/5",
-  archived: "bg-gray-500/20 text-gray-800 border-gray-800/5",
   published: "bg-green-500/20 text-green-800 border-green-800/5",
 };
 

@@ -101,7 +101,6 @@ const WorkflowEditorCanvas = ({ workflow }: Props) => {
       const target = nodes.find((n) => n.id === connection.target);
       if (!source || !target) return false;
 
-
       const sourceTask =
         TaskRegistry[source.data.type as keyof typeof TaskRegistry];
       const targetTask =
@@ -116,25 +115,22 @@ const WorkflowEditorCanvas = ({ workflow }: Props) => {
         (i: any) => i.name === connection.targetHandle
       );
 
-      if (input?.type !== output?.type){
+      if (input?.type !== output?.type) {
         console.log("Invalid connection: type mismatch");
         return false;
-      } 
+      }
       const hasCycle = (node: AppNode, visited = new Set()) => {
-        if(visited.has(node.id)) return false;
+        if (visited.has(node.id)) return false;
         visited.add(node.id);
-
 
         for (const outgoer of getOutgoers(node, nodes, edges)) {
           if (outgoer.id === connection.source) return true;
           if (hasCycle(outgoer, visited)) return true;
         }
-      }
+      };
 
       const detectedCycle = hasCycle(target);
       return !detectedCycle;
-
-
     },
     [nodes, edges]
   );
@@ -149,14 +145,14 @@ const WorkflowEditorCanvas = ({ workflow }: Props) => {
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         fitView
-        fitViewOptions={{ padding: 1.5 }}
+        fitViewOptions={{ padding: 0.1 }}
         onDragOver={onDragOver}
         onDrop={onDrop}
         onConnect={onConnect}
         isValidConnection={isValidConnection}
       >
         <Background />
-        <Controls position="top-left" fitViewOptions={{ padding: 1.5 }} />
+        <Controls position="top-left" fitViewOptions={{ padding: 0.1 }} />
       </ReactFlow>
     </main>
   );

@@ -2,7 +2,6 @@ import React from "react";
 import { TaskType } from "../../types";
 import { TaskRegistry } from "../tasks/registry";
 import { Button } from "@/components/ui/button";
-import { on } from "events";
 
 interface Props {
   taskType: TaskType;

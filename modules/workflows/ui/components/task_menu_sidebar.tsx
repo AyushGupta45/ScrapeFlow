@@ -31,15 +31,15 @@ const TaskMenuSidebar = () => {
   return (
     <>
       <Sidebar className="select-none">
-        <SidebarHeader className="text-sidebar-accent-foreground py-4">
+        <SidebarHeader className="text-sidebar-accent-foreground py-4 bg-white">
           <div className="flex justify-center">
             <Logo />
           </div>
         </SidebarHeader>
 
-        <Separator className="mb-4" />
+        <Separator />
 
-        <SidebarContent className="">
+        <SidebarContent className="bg-white">
           <SidebarGroup>
             <SidebarGroupContent>
               <Accordion
@@ -64,6 +64,10 @@ const TaskMenuSidebar = () => {
                 {/* You can add more accordion sections here */}
               </Accordion>
             </SidebarGroupContent>
+
+            <Separator />
+
+
           </SidebarGroup>
         </SidebarContent>
       </Sidebar>
