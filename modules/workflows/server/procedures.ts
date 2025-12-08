@@ -1,7 +1,16 @@
 import { db } from "@/db";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
-import { and, count, desc, eq, getTableColumns, ilike, sql } from "drizzle-orm";
+import {
+  and,
+  asc,
+  count,
+  desc,
+  eq,
+  getTableColumns,
+  ilike,
+  sql,
+} from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { executionPhase, workflow, workflowExecution } from "@/db/schema";
 import {
@@ -21,7 +30,7 @@ import {
   ExecutionPhaseStatus,
   ExecutionTrigger,
 } from "../types";
-import { CreateFlowNode } from "../ui/components/canvas_nodes/create-node-flow";
+import { CreateFlowNode } from "../ui/components/editor-page/canvas_nodes/create-node-flow";
 import { FlowToExecutionPlan } from "../lib/execution-plan";
 import { TaskRegistry } from "../ui/tasks/registry";
 
@@ -69,6 +78,7 @@ export const workflowsRouter = createTRPCRouter({
 
       return createdWorkflow;
     }),
+
   update: protectedProcedure
     .input(workflowUpdateSchema)
     .mutation(async ({ input, ctx }) => {
@@ -89,6 +99,7 @@ export const workflowsRouter = createTRPCRouter({
 
       return updatedWorkflow;
     }),
+
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
@@ -260,5 +271,43 @@ export const workflowsRouter = createTRPCRouter({
         ...workflow_execution,
         execution_phase,
       };
+    }),
+
+  getExecution: protectedProcedure
+    .input(z.object({ executionId: z.string(), workflowId: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const executions = await db
+        .select()
+        .from(workflowExecution)
+        .where(
+          and(
+            eq(workflowExecution.id, input.executionId),
+            eq(workflowExecution.workflowId, input.workflowId),
+            eq(workflowExecution.userId, ctx.auth.user.id)
+          )
+        )
+        .limit(1);
+
+      if (!executions.length) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Workflow execution not found",
+        });
+      }
+
+      const execution = executions[0];
+
+      const phases = await db
+        .select()
+        .from(executionPhase)
+        .where(eq(executionPhase.workflowExecutionId, execution.id))
+        .orderBy(asc(executionPhase.number));
+
+      const result = {
+        ...execution,
+        phases: phases,
+      };
+
+      return result;
     }),
 });

@@ -4,6 +4,10 @@ import type { AppRouter } from "@/trpc/routers/_app";
 
 export type WorkflowGetOne =
   inferRouterOutputs<AppRouter>["workflows"]["getOne"];
+
+export type WorkflowGetExecution =
+  inferRouterOutputs<AppRouter>["workflows"]["getExecution"];
+  
 export type WorkflowGetMany =
   inferRouterOutputs<AppRouter>["workflows"]["getMany"]["items"];
 

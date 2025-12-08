@@ -1,12 +1,12 @@
 "use client";
 import { AppNode, TaskType } from "@/modules/workflows/types";
 import React from "react";
-import { TaskRegistry } from "../../tasks/registry";
 import { Badge } from "@/components/ui/badge";
 import { CoinsIcon, CopyIcon, GripVerticalIcon, TrashIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useReactFlow } from "@xyflow/react";
 import { CreateFlowNode } from "./create-node-flow";
+import { TaskRegistry } from "../../../tasks/registry";
 
 interface Props {
   taskType: TaskType;

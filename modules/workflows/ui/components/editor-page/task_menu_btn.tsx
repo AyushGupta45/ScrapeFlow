@@ -1,7 +1,7 @@
 import React from "react";
-import { TaskType } from "../../types";
-import { TaskRegistry } from "../tasks/registry";
 import { Button } from "@/components/ui/button";
+import { TaskRegistry } from "../../tasks/registry";
+import { TaskType } from "@/modules/workflows/types";
 
 interface Props {
   taskType: TaskType;

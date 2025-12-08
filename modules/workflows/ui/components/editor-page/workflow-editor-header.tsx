@@ -3,7 +3,6 @@ import React from "react";
 
 import { PanelLeftCloseIcon, PanelLeftIcon, SaveIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { WorkflowGetOne } from "../../types";
 import { useTRPC } from "@/trpc/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -17,6 +16,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
 import { useSidebar } from "@/components/ui/sidebar";
+import { WorkflowGetOne } from "@/modules/workflows/types";
 import ExecuteWorkflowButton from "./execute-workflow-btn";
 
 interface Props {

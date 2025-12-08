@@ -14,13 +14,23 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronsUpDownIcon, CreditCardIcon, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const DashboardUserButton = () => {
   const router = useRouter();
   const { data, isPending } = authClient.useSession();
 
   if (isPending || !data?.user) {
-    return null;
+    return (
+      <div className="rounded-lg border-2 bg-sidebar-accent border-sidebar-border cursor-default p-3 w-full flex items-center justify-between overflow-hidden gap-2">
+        <Skeleton className="h-9 w-9 rounded-full" />
+        <div className="flex flex-col gap-1 flex-1 min-w-0">
+          <Skeleton className="h-4.5 w-3/4" />
+          <Skeleton className="h-4 w-1/2" />
+        </div>
+        <Skeleton className="h-4 w-4 shrink-0" />
+      </div>
+    );
   }
 
   return (
@@ -31,10 +41,7 @@ const DashboardUserButton = () => {
             <AvatarImage src={data.user.image} />
           </Avatar>
         ) : (
-          <GeneratedAvatar
-            seed={data.user.name}
-            className="size-9 mr-3"
-          />
+          <GeneratedAvatar seed={data.user.name} className="size-9 mr-3" />
         )}
         <div className="flex flex-col gap-0.5 text-left overflow-hidden flex-1 min-w-0">
           <p className="text-sm truncate w-full">{data.user.name}</p>
@@ -53,13 +60,6 @@ const DashboardUserButton = () => {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          // onClick={async () => await authClient.customer.portal()}
-          className="cursor-pointer flex items-center justify-between"
-        >
-          Billing
-          <CreditCardIcon className="size-4" />
-        </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() =>
             authClient.signOut({

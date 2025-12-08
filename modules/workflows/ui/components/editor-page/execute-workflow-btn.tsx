@@ -3,12 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { PlayIcon } from "lucide-react";
 import React from "react";
-import { useExecutionPlan } from "../../hooks/use-execution-plan";
 import { useTRPC } from "@/trpc/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useReactFlow } from "@xyflow/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useExecutionPlan } from "@/modules/workflows/hooks/use-execution-plan";
 
 interface Props {
   workflowId: string;

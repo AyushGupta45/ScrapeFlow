@@ -18,14 +18,14 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import React from "react";
-import { TaskType } from "../../types";
 import TaskMenuItem from "./task_menu_btn";
 import { useSidebar } from "@/components/ui/sidebar";
 import clsx from "clsx";
 import Logo from "@/components/Logo";
 import { Separator } from "@/components/ui/separator";
+import { TaskType } from "@/modules/workflows/types";
 
-const TaskMenuSidebar = () => {
+const WorkflowEditorSidebar = () => {
   const { state, isMobile } = useSidebar();
 
   return (
@@ -75,4 +75,4 @@ const TaskMenuSidebar = () => {
   );
 };
 
-export default TaskMenuSidebar;
+export default WorkflowEditorSidebar;

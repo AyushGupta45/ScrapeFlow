@@ -3,10 +3,10 @@ import { memo } from "react";
 import NodeCard from "./node-card";
 import NodeHeader from "./node-header";
 import { AppNodeData } from "@/modules/workflows/types";
-import { TaskRegistry } from "../../tasks/registry";
 import { NodeInput, NodeInputs } from "./node-inputs";
 import { NodeOutput, NodeOutputs } from "./node-outputs";
 import { Badge } from "@/components/ui/badge";
+import { TaskRegistry } from "../../../tasks/registry";
 
 const DEV_MODE = process.env.NEXT_PUBLIC_DEV_MODE === "true";
 

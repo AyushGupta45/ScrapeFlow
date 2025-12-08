@@ -6,7 +6,7 @@ import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React from "react";
-import WorkflowEditor from "../components/workflow-editor";
+import WorkflowEditor from "../components/editor-page/workflow-editor";
 
 interface Props {
   workflowId: string;

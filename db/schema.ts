@@ -173,38 +173,38 @@ export const executionLog = pgTable("execution_log", {
     .references(() => executionPhase.id, { onDelete: "cascade" }),
 });
 
-export const workflowRelations = relations(workflow, ({ many }) => ({
-  executions: many(workflowExecution),
-}));
+// export const workflowRelations = relations(workflow, ({ many }) => ({
+//   executions: many(workflowExecution),
+// }));
 
-export const workflowExecutionRelations = relations(
-  workflowExecution,
-  ({ one, many }) => ({
-    workflow: one(workflow, {
-      fields: [workflowExecution.workflowId],
-      references: [workflow.id],
-    }),
-    phases: many(executionPhase),
-  })
-);
+// export const workflowExecutionRelations = relations(
+//   workflowExecution,
+//   ({ one, many }) => ({
+//     workflow: one(workflow, {
+//       fields: [workflowExecution.workflowId],
+//       references: [workflow.id],
+//     }),
+//     phases: many(executionPhase),
+//   })
+// );
 
-export const executionPhaseRelations = relations(
-  executionPhase,
-  ({ one, many }) => ({
-    execution: one(workflowExecution, {
-      fields: [executionPhase.workflowExecutionId],
-      references: [workflowExecution.id],
-    }),
-    logs: many(executionLog),
-  })
-);
+// export const executionPhaseRelations = relations(
+//   executionPhase,
+//   ({ one, many }) => ({
+//     execution: one(workflowExecution, {
+//       fields: [executionPhase.workflowExecutionId],
+//       references: [workflowExecution.id],
+//     }),
+//     logs: many(executionLog),
+//   })
+// );
 
-export const executionLogRelations = relations(executionLog, ({ one }) => ({
-  executionPhase: one(executionPhase, {
-    fields: [executionLog.executionPhaseId],
-    references: [executionPhase.id],
-  }),
-}));
+// export const executionLogRelations = relations(executionLog, ({ one }) => ({
+//   executionPhase: one(executionPhase, {
+//     fields: [executionLog.executionPhaseId],
+//     references: [executionPhase.id],
+//   }),
+// }));
 
 // export const workflow = pgTable("workflow", {
 //   id: text("id")

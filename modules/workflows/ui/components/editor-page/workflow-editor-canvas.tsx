@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import { AppNode, TaskType } from "../../types";
+import { AppNode, TaskType } from "../../../types";
 import {
   addEdge,
   Background,
@@ -15,10 +15,10 @@ import {
 import "@xyflow/react/dist/style.css";
 
 import { NodeComponent } from "./canvas_nodes/node-components";
-import { WorkflowGetOne } from "../../types";
+import { WorkflowGetOne } from "../../../types";
 import { CreateFlowNode } from "./canvas_nodes/create-node-flow";
-import { DeletableEdge } from "./canvas_edges/deletable-edge";
-import { TaskRegistry } from "../tasks/registry";
+import { DeletableEdge } from "./canvas_nodes/deletable-edge";
+import { TaskRegistry } from "../../tasks/registry";
 import { get } from "http";
 
 interface Props {
